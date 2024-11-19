@@ -1,0 +1,350 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(45deg, #41BCF8, #FC4BFE);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+/* Navbar */
+.navbar {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar .hamburger {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-left: 0;
+}
+
+.navbar .logo img {
+  padding-left: 10px;
+  width: 25%; /* Increased width */
+  height: 25%;
+  object-fit: contain;
+}
+
+.navbar .logo span {
+  font-size: 1.4rem; /* Adjusted text size for better fit */
+  font-weight: bold;
+}
+
+.navbar.hidden .logo {
+  display: none; /* Hide the main logo when the menu is open */
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 30%; /* Increased width for logo and text */
+  height: 100%;
+  background: linear-gradient(45deg, #2575fc, #6a11cb);  /* Gradient background */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: left 0.4s ease, opacity 0.3s ease;
+  z-index: 1001;
+}
+
+.sidebar.active {
+  left: 0;
+  opacity: 1;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sidebar-header img {
+  padding-right: 10px;
+  width: 85%; /* Larger logo size */
+  height: 85%;
+}
+
+.sidebar-header span {
+  font-size: 1.4rem; /* Adjusted text size for better fit */
+  font-weight: bold;
+  color: #fff;
+}
+
+.sidebar-header i {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 10px 15px;
+  border-bottom: 1px solid #34495e;
+}
+
+.sidebar ul li a {
+  color: #ecf0f1;
+  text-decoration: none;
+  display: block;
+}
+
+/* Footer in Sidebar */
+.footer {
+  margin-top: auto;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Translator Container */
+.container {
+  width: 100%;
+  max-width: 700px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+  margin-top: 30px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.text-input textarea {
+  width: 100%;
+  height: 120px;
+  padding: 15px;
+  font-size: 1rem;
+  color: #333;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+.text-input .from-text {
+  background: #f0f0f0;
+}
+
+.text-input .to-text {
+  background: #d6d6d6;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 15px 0; /* Added Padding Between Selectors */
+}
+
+.controls .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.controls select {
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  background: #fff;
+  color: #333;
+  outline: none;
+  flex: 1;
+  position: relative;
+  width: 100%; /* Ensures select takes full width */
+}
+
+.controls .icons {
+  display: flex;
+  gap: 10px;
+}
+
+.controls .icons i {
+  font-size: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.controls .icons i:hover {
+  transform: scale(1.2);
+}
+
+.exchange {
+  cursor: pointer;
+  font-size: 2rem;
+  color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.exchange:hover {
+  transform: rotate(180deg);
+}
+
+/* Translate Button */
+button {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #2575fc, #6a11cb);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 20px;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  transform: scale(1.05);
+}
+
+/* Remove default list styling from select elements */
+select {
+  -webkit-appearance: none;  /* For WebKit-based browsers (Chrome, Safari) */
+  -moz-appearance: none;     /* For Firefox */
+  appearance: none;          /* For other browsers */
+  background: transparent;   /* Removes default background */
+  border: 1px solid #ddd;    /* Adjust the border for styling */
+  padding-right: 30px;       /* Create space for the dropdown arrow */
+  background-position: right 10px center; /* Align custom arrow to the right */
+}
+
+/* Custom arrow styling for select box */
+select::-ms-expand {
+  display: none; /* Remove default dropdown arrow for IE */
+}
+
+.controls select {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  background: #fff;
+  color: #333;
+  outline: none;
+  flex: 1;
+  position: relative;
+  width: 100%; /* Ensures select takes full width */
+}
+
+.controls select::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 75%; /* Increased width for mobile */
+  }
+
+  .container {
+    padding: 30px 20px;
+    max-width: 100%;
+    margin-top: 50px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar.hidden .logo {
+    display: block;
+  }
+
+  .navbar {
+    padding: 10px;
+  }
+
+  .navbar .logo {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .navbar .logo img {
+    width: 50%; /* Make logo smaller in mobile view */
+  }
+
+  .navbar .logo span {
+    font-size: 1.2rem; /* Smaller text for mobile */
+  }
+
+  .wrapper {
+    align-items: center;
+  }
+
+  .controls select {
+    width: auto;
+  }
+
+  .exchange {
+    font-size: 1.5rem;
+    margin: 0 15px;
+  }
+}

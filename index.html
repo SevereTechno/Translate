@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Severe Techno Translator</title>
+
+  <!-- Link to the CSS file -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="hamburger" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+    <div class="logo" id="main-logo">
+      <img src="Severe Techno Logo.svg" alt="icon"> <!-- Replace with your logo URL -->
+      <span>Translator</span>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="Severe Techno Logo.svg" alt="icon"> <!-- Replace with your logo -->
+      <i class="fas fa-times" onclick="toggleMenu()"></i>
+    </div>
+    <ul>
+      <li><a href="https://severetechno.github.io/Translate/About">About</a></li>
+      <li><a href="https://severetechno.github.io/Translate/T&C">Privacy & Terms</a></li>
+      <li><a href="https://severetechno.github.io/Translate/Help">Help</a></li>
+    </ul>
+    <div class="footer">
+      <p>© 2016-<span id="current-year"></span> Severe Techno</p>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="sidebar-overlay" onclick="toggleMenu()"></div>
+
+  <!-- Translator Container -->
+  <div class="container">
+    <div class="wrapper">
+      <div class="text-input">
+        <textarea spellcheck="false" class="from-text" id="from-text" placeholder="Enter text"></textarea>
+        <textarea spellcheck="false" readonly class="to-text" id="to-text" placeholder="Translation"
+          onclick="this.select();"></textarea>
+      </div>
+      <ul class="controls">
+        <li class="row from">
+          <div class="icons">
+          </div>
+          <select id="from-language"></select>
+        </li>
+        <li class="exchange"><i class="fas fa-exchange-alt"></i></li>
+        <li class="row to">
+          <select id="to-language"></select>
+          <div class="icons">
+            <i id="to-copy" class="fas fa-copy"></i>
+          </div>
+        </li>
+      </ul>
+      <button class="translate-btn" id="translate-btn">Translate</button>
+    </div>
+  </div>
+
+  <!-- Import the scripts -->
+  <script src="script.js"></script>
+</body>
+
+</html>
