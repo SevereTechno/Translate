@@ -266,39 +266,30 @@ button:hover {
 
 /* Remove default list styling from select elements */
 select {
-  -webkit-appearance: none;  /* For WebKit-based browsers (Chrome, Safari) */
-  -moz-appearance: none;     /* For Firefox */
-  appearance: none;          /* For other browsers */
-  background: transparent;   /* Removes default background */
-  border: 1px solid #ddd;    /* Adjust the border for styling */
-  padding-right: 30px;       /* Create space for the dropdown arrow */
-  background-position: right 10px center; /* Align custom arrow to the right */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+  border: 1px solid #ddd;
+  padding-right: 30px;
+  background-position: right 10px center;
 }
 
-/* Custom arrow styling for select box */
 select::-ms-expand {
   display: none; /* Remove default dropdown arrow for IE */
 }
 
-.controls select {
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 5px;
-  background: #fff;
-  color: #333;
-  outline: none;
-  flex: 1;
-  position: relative;
-  width: 100%; /* Ensures select takes full width */
-}
-
-.controls select::-webkit-search-cancel-button {
-  -webkit-appearance: none;
-  display: none;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar .logo {
+    display: none; /* Hide the logo in the navbar for mobile view */
+  }
+
   .sidebar {
     width: 75%; /* Increased width for mobile */
   }
@@ -307,32 +298,6 @@ select::-ms-expand {
     padding: 30px 20px;
     max-width: 100%;
     margin-top: 50px;
-  }
-
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .navbar.hidden .logo {
-    display: block;
-  }
-
-  .navbar {
-    padding: 10px;
-  }
-
-  .navbar .logo {
-    justify-content: center;
-    width: 100%;
-  }
-
-  .navbar .logo img {
-    width: 50%; /* Make logo smaller in mobile view */
-  }
-
-  .navbar .logo span {
-    font-size: 1.2rem; /* Smaller text for mobile */
   }
 
   .wrapper {
