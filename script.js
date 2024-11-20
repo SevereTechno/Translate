@@ -109,39 +109,6 @@ const fromText = document.querySelector(".from-text"),
     hamburger = document.querySelector(".hamburger"),
     navMenu = document.querySelector(".nav-menu");
 
-// Translation dictionary (example)
-const translations = {
-    "hello": {
-        "es-ES": "hola",
-        "fr-FR": "bonjour",
-        "de-DE": "hallo",
-        "hi-IN": "नमस्ते",
-        "ja-JP": "こんにちは"
-    },
-    "good morning": {
-        "es-ES": "buenos días",
-        "fr-FR": "bonjour",
-        "de-DE": "guten Morgen",
-        "hi-IN": "सुप्रभात",
-        "ja-JP": "おはよう"
-    }
-};
-
-// Hamburger Menu Toggle - Fix for the issue
-document.addEventListener("DOMContentLoaded", function () {
-    // Ensure hamburger and navMenu are not null before adding event listener
-    if (hamburger && navMenu) {
-        hamburger.addEventListener("click", function () {
-            // Toggle the "active" class to show/hide the nav menu
-            navMenu.classList.toggle("active");
-            // Toggle the "active" class on the hamburger icon itself for animation
-            hamburger.classList.toggle("active");
-        });
-    } else {
-        console.error("Hamburger or navMenu element not found.");
-    }
-});
-
 // Populate language dropdown
 selectTag.forEach((tag, id) => {
     for (let country_code in countries) {
@@ -174,7 +141,7 @@ fromText.addEventListener("keyup", () => {
     }
 });
 
-// Translate Button Event
+// Translate Button Event - Uses the API
 translateBtn.addEventListener("click", () => {
     let text = fromText.value.trim(),
         translateFrom = selectTag[0].value,
@@ -182,12 +149,25 @@ translateBtn.addEventListener("click", () => {
 
     if (!text) return;
 
-    text = normalizeText(text);
-
-    // Check for translation in dictionary
-    let translatedText = translations[text] ? translations[text][translateTo] : "Translation not available";
-
-    toText.value = translatedText;
+    toText.setAttribute("placeholder", "Translating...");
+    
+    // Use the translation API
+    let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
+    fetch(apiUrl)
+        .then(res => res.json())
+        .then(data => {
+            if (data.responseData) {
+                toText.value = data.responseData.translatedText;
+            } else {
+                toText.value = "Translation not available";
+            }
+            toText.setAttribute("placeholder", "Translation");
+        })
+        .catch(error => {
+            console.error("Translation Error:", error);
+            toText.value = "Error fetching translation.";
+            toText.setAttribute("placeholder", "Translation");
+        });
 });
 
 // Copy or Speak functionality
@@ -214,42 +194,25 @@ icons.forEach(icon => {
         }
     });
 });
-// Wait for the DOM to be fully loaded
+
+// Hamburger Menu Toggle - Fix for the issue
 document.addEventListener("DOMContentLoaded", function () {
-    const hamburger = document.querySelector(".hamburger");
-    const navMenu = document.querySelector(".sidebar");
-    const overlay = document.querySelector(".sidebar-overlay");
-
-    // If hamburger and navMenu are found in the DOM
     if (hamburger && navMenu) {
-        // Handle hamburger click
         hamburger.addEventListener("click", function () {
-            navMenu.classList.toggle("active"); // Toggle the sidebar visibility
-            document.body.classList.toggle("no-scroll"); // Optional: Prevent body scrolling when menu is open
-        });
-
-        // Handle overlay click to close the menu
-        overlay.addEventListener("click", function () {
-            navMenu.classList.remove("active");
-            document.body.classList.remove("no-scroll");
-        });
-
-        // Handle sidebar close button click
-        const closeBtn = navMenu.querySelector(".fa-times");
-        closeBtn.addEventListener("click", function () {
-            navMenu.classList.remove("active");
-            document.body.classList.remove("no-scroll");
+            navMenu.classList.toggle("active");
+            hamburger.classList.toggle("active");
         });
     } else {
         console.error("Hamburger or navMenu element not found.");
     }
 });
+
 // Set current year dynamically
 document.addEventListener("DOMContentLoaded", function () {
-    const currentYear = new Date().getFullYear(); // Get the current year
-    const yearSpan = document.getElementById("current-year"); // Find the element with the ID 'current-year'
+    const currentYear = new Date().getFullYear();
+    const yearSpan = document.getElementById("current-year");
 
     if (yearSpan) {
-      yearSpan.textContent = currentYear; // Set the current year in the element
+        yearSpan.textContent = currentYear;
     }
-  });
+});
