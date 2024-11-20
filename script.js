@@ -1,4 +1,4 @@
-// Countries' denotation Script
+// Countries' denotation script
 const countries = {
     "am-ET": "Amharic",
     "ar-SA": "Arabic",
@@ -99,13 +99,48 @@ const countries = {
     "zu-ZA": "Zulu"
 };
 
-// Translation Script
+// DOM Elements
 const fromText = document.querySelector(".from-text"),
     toText = document.querySelector(".to-text"),
     exchageIcon = document.querySelector(".exchange"),
     selectTag = document.querySelectorAll("select"),
     icons = document.querySelectorAll(".row i"),
-    translateBtn = document.querySelector("button");
+    translateBtn = document.querySelector("button"),
+    hamburger = document.querySelector(".hamburger"),
+    navMenu = document.querySelector(".nav-menu");
+
+// Translation dictionary (example)
+const translations = {
+    "hello": {
+        "es-ES": "hola",
+        "fr-FR": "bonjour",
+        "de-DE": "hallo",
+        "hi-IN": "नमस्ते",
+        "ja-JP": "こんにちは"
+    },
+    "good morning": {
+        "es-ES": "buenos días",
+        "fr-FR": "bonjour",
+        "de-DE": "guten Morgen",
+        "hi-IN": "सुप्रभात",
+        "ja-JP": "おはよう"
+    }
+};
+
+// Hamburger Menu Toggle - Fix for the issue
+document.addEventListener("DOMContentLoaded", function () {
+    // Ensure hamburger and navMenu are not null before adding event listener
+    if (hamburger && navMenu) {
+        hamburger.addEventListener("click", function () {
+            // Toggle the "active" class to show/hide the nav menu
+            navMenu.classList.toggle("active");
+            // Toggle the "active" class on the hamburger icon itself for animation
+            hamburger.classList.toggle("active");
+        });
+    } else {
+        console.error("Hamburger or navMenu element not found.");
+    }
+});
 
 // Populate language dropdown
 selectTag.forEach((tag, id) => {
@@ -116,18 +151,9 @@ selectTag.forEach((tag, id) => {
     }
 });
 
-// Normalize the text: Remove extra spaces, convert to lowercase, handle punctuation.
+// Normalize the text
 function normalizeText(text) {
-    // Remove extra spaces
-    text = text.trim().replace(/\s+/g, ' ');
-
-    // Convert text to lowercase for better matching (case insensitive)
-    text = text.toLowerCase();
-
-    // Handle punctuation (optional)
-    text = text.replace(/[^\w\s]|_/g, "")  // Remove underscores and other punctuations
-               .replace(/\s+/g, " ");     // Normalize spaces
-
+    text = text.trim().replace(/\s+/g, ' ').toLowerCase();
     return text;
 }
 
@@ -156,28 +182,12 @@ translateBtn.addEventListener("click", () => {
 
     if (!text) return;
 
-    // Normalize input text
     text = normalizeText(text);
 
-    toText.setAttribute("placeholder", "Translating...");
-    let apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${translateFrom}|${translateTo}`;
+    // Check for translation in dictionary
+    let translatedText = translations[text] ? translations[text][translateTo] : "Translation not available";
 
-    fetch(apiUrl)
-        .then(res => res.json())
-        .then(data => {
-            if (data.responseData) {
-                toText.value = data.responseData.translatedText;
-            } else {
-                toText.value = "Translation failed.";
-            }
-        })
-        .catch(error => {
-            console.error("Translation error:", error);
-            toText.value = "Error: Unable to translate.";
-        })
-        .finally(() => {
-            toText.setAttribute("placeholder", "Translation");
-        });
+    toText.value = translatedText;
 });
 
 // Copy or Speak functionality
@@ -204,48 +214,42 @@ icons.forEach(icon => {
         }
     });
 });
+// Wait for the DOM to be fully loaded
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.querySelector(".hamburger");
+    const navMenu = document.querySelector(".sidebar");
+    const overlay = document.querySelector(".sidebar-overlay");
 
-// Function to detect possible errors or inconsistencies in input text
-function detectTextErrors(text) {
-    const errors = [];
-    // Check if input is too short or invalid for translation
-    if (text.length < 3) {
-        errors.push("Input is too short. Please enter a longer phrase.");
-    }
-    // Regex to check for any special characters that might confuse translation
-    if (/[^a-zA-Z0-9\s]/.test(text)) {
-        errors.push("Input contains unsupported characters.");
-    }
-    return errors;
-}
+    // If hamburger and navMenu are found in the DOM
+    if (hamburger && navMenu) {
+        // Handle hamburger click
+        hamburger.addEventListener("click", function () {
+            navMenu.classList.toggle("active"); // Toggle the sidebar visibility
+            document.body.classList.toggle("no-scroll"); // Optional: Prevent body scrolling when menu is open
+        });
 
-// Function to handle language-specific settings or features
-function handleLanguageSpecificFeatures(language) {
-    if (language === 'ar-SA') {
-        // Special case for Arabic, reverse text direction
-        fromText.style.direction = 'rtl';
-        toText.style.direction = 'rtl';
+        // Handle overlay click to close the menu
+        overlay.addEventListener("click", function () {
+            navMenu.classList.remove("active");
+            document.body.classList.remove("no-scroll");
+        });
+
+        // Handle sidebar close button click
+        const closeBtn = navMenu.querySelector(".fa-times");
+        closeBtn.addEventListener("click", function () {
+            navMenu.classList.remove("active");
+            document.body.classList.remove("no-scroll");
+        });
     } else {
-        // Default left-to-right text direction
-        fromText.style.direction = 'ltr';
-        toText.style.direction = 'ltr';
+        console.error("Hamburger or navMenu element not found.");
     }
-}
-
-// Language change event listener to handle language-specific features
-selectTag.forEach(tag => {
-    tag.addEventListener('change', () => {
-        let fromLang = selectTag[0].value;
-        let toLang = selectTag[1].value;
-
-        // Check for errors in text inputs
-        let errors = detectTextErrors(fromText.value);
-        if (errors.length > 0) {
-            alert(errors.join("\n"));
-        }
-
-        // Handle special language-specific features
-        handleLanguageSpecificFeatures(fromLang);
-        handleLanguageSpecificFeatures(toLang);
-    });
 });
+// Set current year dynamically
+document.addEventListener("DOMContentLoaded", function () {
+    const currentYear = new Date().getFullYear(); // Get the current year
+    const yearSpan = document.getElementById("current-year"); // Find the element with the ID 'current-year'
+
+    if (yearSpan) {
+      yearSpan.textContent = currentYear; // Set the current year in the element
+    }
+  });
