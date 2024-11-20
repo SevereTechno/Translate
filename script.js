@@ -1,4 +1,4 @@
-//Countries' denotation Script
+// Countries' denotation Script
 const countries = {
     "am-ET": "Amharic",
     "ar-SA": "Arabic",
@@ -97,15 +97,17 @@ const countries = {
     "xh-ZA": "Xhosa",
     "yi-YD": "Yiddish",
     "zu-ZA": "Zulu"
-}
-//Translation Script
-const fromText = document.querySelector(".from-text"),
-toText = document.querySelector(".to-text"),
-exchageIcon = document.querySelector(".exchange"),
-selectTag = document.querySelectorAll("select"),
-icons = document.querySelectorAll(".row i");
-translateBtn = document.querySelector("button"),
+};
 
+// Translation Script
+const fromText = document.querySelector(".from-text"),
+    toText = document.querySelector(".to-text"),
+    exchageIcon = document.querySelector(".exchange"),
+    selectTag = document.querySelectorAll("select"),
+    icons = document.querySelectorAll(".row i"),
+    translateBtn = document.querySelector("button");
+
+// Populate language dropdown
 selectTag.forEach((tag, id) => {
     for (let country_code in countries) {
         let selected = id == 0 ? country_code == "en-GB" ? "selected" : "" : country_code == "hi-IN" ? "selected" : "";
@@ -114,51 +116,84 @@ selectTag.forEach((tag, id) => {
     }
 });
 
+// Normalize the text: Remove extra spaces, convert to lowercase, handle punctuation.
+function normalizeText(text) {
+    // Remove extra spaces
+    text = text.trim().replace(/\s+/g, ' ');
+
+    // Convert text to lowercase for better matching (case insensitive)
+    text = text.toLowerCase();
+
+    // Handle punctuation (optional)
+    text = text.replace(/[^\w\s]|_/g, "")  // Remove underscores and other punctuations
+               .replace(/\s+/g, " ");     // Normalize spaces
+
+    return text;
+}
+
+// Exchange languages and texts
 exchageIcon.addEventListener("click", () => {
     let tempText = fromText.value,
-    tempLang = selectTag[0].value;
+        tempLang = selectTag[0].value;
     fromText.value = toText.value;
     toText.value = tempText;
     selectTag[0].value = selectTag[1].value;
     selectTag[1].value = tempLang;
 });
 
+// Clear translation if no input
 fromText.addEventListener("keyup", () => {
-    if(!fromText.value) {
+    if (!fromText.value) {
         toText.value = "";
     }
 });
 
+// Translate Button Event
 translateBtn.addEventListener("click", () => {
     let text = fromText.value.trim(),
-    translateFrom = selectTag[0].value,
-    translateTo = selectTag[1].value;
-    if(!text) return;
+        translateFrom = selectTag[0].value,
+        translateTo = selectTag[1].value;
+
+    if (!text) return;
+
+    // Normalize input text
+    text = normalizeText(text);
+
     toText.setAttribute("placeholder", "Translating...");
-    let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
-    fetch(apiUrl).then(res => res.json()).then(data => {
-        toText.value = data.responseData.translatedText;
-        data.matches.forEach(data => {
-            if(data.id === 0) {
-                toText.value = data.translation;
+    let apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${translateFrom}|${translateTo}`;
+
+    fetch(apiUrl)
+        .then(res => res.json())
+        .then(data => {
+            if (data.responseData) {
+                toText.value = data.responseData.translatedText;
+            } else {
+                toText.value = "Translation failed.";
             }
+        })
+        .catch(error => {
+            console.error("Translation error:", error);
+            toText.value = "Error: Unable to translate.";
+        })
+        .finally(() => {
+            toText.setAttribute("placeholder", "Translation");
         });
-        toText.setAttribute("placeholder", "Translation");
-    });
 });
 
+// Copy or Speak functionality
 icons.forEach(icon => {
-    icon.addEventListener("click", ({target}) => {
-        if(!fromText.value || !toText.value) return;
-        if(target.classList.contains("fa-copy")) {
-            if(target.id == "from") {
+    icon.addEventListener("click", ({ target }) => {
+        if (!fromText.value || !toText.value) return;
+
+        if (target.classList.contains("fa-copy")) {
+            if (target.id == "from") {
                 navigator.clipboard.writeText(fromText.value);
             } else {
                 navigator.clipboard.writeText(toText.value);
             }
         } else {
             let utterance;
-            if(target.id == "from") {
+            if (target.id == "from") {
                 utterance = new SpeechSynthesisUtterance(fromText.value);
                 utterance.lang = selectTag[0].value;
             } else {
@@ -169,19 +204,48 @@ icons.forEach(icon => {
         }
     });
 });
-// Sidebar toggle function
-function toggleMenu() {
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.querySelector(".sidebar-overlay");
-    const navbar = document.getElementById("navbar");
-    const mainLogo = document.getElementById("main-logo");
-  
-    sidebar.classList.toggle("active");
-    overlay.classList.toggle("active");
-    navbar.classList.toggle("hidden");
-    mainLogo.classList.toggle("hidden");
-  }
-  
-  // Set the current year dynamically
-  document.getElementById("current-year").textContent = new Date().getFullYear();
-  
+
+// Function to detect possible errors or inconsistencies in input text
+function detectTextErrors(text) {
+    const errors = [];
+    // Check if input is too short or invalid for translation
+    if (text.length < 3) {
+        errors.push("Input is too short. Please enter a longer phrase.");
+    }
+    // Regex to check for any special characters that might confuse translation
+    if (/[^a-zA-Z0-9\s]/.test(text)) {
+        errors.push("Input contains unsupported characters.");
+    }
+    return errors;
+}
+
+// Function to handle language-specific settings or features
+function handleLanguageSpecificFeatures(language) {
+    if (language === 'ar-SA') {
+        // Special case for Arabic, reverse text direction
+        fromText.style.direction = 'rtl';
+        toText.style.direction = 'rtl';
+    } else {
+        // Default left-to-right text direction
+        fromText.style.direction = 'ltr';
+        toText.style.direction = 'ltr';
+    }
+}
+
+// Language change event listener to handle language-specific features
+selectTag.forEach(tag => {
+    tag.addEventListener('change', () => {
+        let fromLang = selectTag[0].value;
+        let toLang = selectTag[1].value;
+
+        // Check for errors in text inputs
+        let errors = detectTextErrors(fromText.value);
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+        }
+
+        // Handle special language-specific features
+        handleLanguageSpecificFeatures(fromLang);
+        handleLanguageSpecificFeatures(toLang);
+    });
+});
