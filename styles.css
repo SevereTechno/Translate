@@ -1,4 +1,4 @@
-/* General Reset */
+/*© Severe Techno*/
 * {
   margin: 0;
   padding: 0;
@@ -17,7 +17,6 @@ body {
   padding: 20px;
 }
 
-/* Navbar */
 .navbar {
   width: 100%;
   max-width: 1200px;
@@ -46,28 +45,27 @@ body {
 
 .navbar .logo img {
   padding-left: 10px;
-  width: 25%; /* Increased width */
+  width: 25%;
   height: 25%;
   object-fit: contain;
 }
 
 .navbar .logo span {
-  font-size: 1.4rem; /* Adjusted text size for better fit */
+  font-size: 1.4rem;
   font-weight: bold;
 }
 
 .navbar.hidden .logo {
-  display: none; /* Hide the main logo when the menu is open */
+  display: none;
 }
 
-/* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
   left: -100%;
-  width: 20%; /* Increased width for logo and text */
+  width: 20%;
   height: 100%;
-  background: linear-gradient(45deg, #2575fc, #6a11cb);  /* Gradient background */
+  background: linear-gradient(45deg, #2575fc, #6a11cb);
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -91,12 +89,25 @@ body {
 
 .sidebar-header img {
   padding-right: 10px;
-  width: 85%; /* Larger logo size */
+  width: 85%;
   height: 85%;
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .sidebar-header img {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .sidebar-header img {
+    display: none;
+  }
 }
 
 .sidebar-header span {
-  font-size: 1.4rem; /* Adjusted text size for better fit */
+  font-size: 1.4rem;
   font-weight: bold;
   color: #fff;
 }
@@ -123,7 +134,6 @@ body {
   display: block;
 }
 
-/* Footer in Sidebar */
 .footer {
   margin-top: auto;
   text-align: center;
@@ -131,7 +141,6 @@ body {
   color: #fff;
 }
 
-/* Sidebar Overlay */
 .sidebar-overlay {
   position: fixed;
   top: 0;
@@ -150,7 +159,6 @@ body {
   visibility: visible;
 }
 
-/* Translator Container */
 .container {
   width: 100%;
   max-width: 700px;
@@ -194,7 +202,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 15px;
-  padding: 15px 0; /* Added Padding Between Selectors */
+  padding: 15px 0;
 }
 
 .controls .row {
@@ -214,7 +222,7 @@ body {
   outline: none;
   flex: 1;
   position: relative;
-  width: 100%; /* Ensures select takes full width */
+  width: 100%;
 }
 
 .controls .icons {
@@ -244,7 +252,6 @@ body {
   transform: rotate(180deg);
 }
 
-/* Translate Button */
 button {
   width: 100%;
   padding: 15px;
@@ -264,7 +271,6 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Remove default list styling from select elements */
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -276,10 +282,9 @@ select {
 }
 
 select::-ms-expand {
-  display: none; /* Remove default dropdown arrow for IE */
+  display: none;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
@@ -287,11 +292,11 @@ select::-ms-expand {
   }
 
   .navbar .logo {
-    display: none; /* Hide the logo in the navbar for mobile view */
+    display: none;
   }
 
   .sidebar {
-    width: 75%; /* Increased width for mobile */
+    width: 75%;
   }
 
   .container {
@@ -313,3 +318,4 @@ select::-ms-expand {
     margin: 0 15px;
   }
 }
+/*© Severe Techno*/
