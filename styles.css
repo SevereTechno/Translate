@@ -65,7 +65,7 @@ body {
   position: fixed;
   top: 0;
   left: -100%;
-  width: 30%; /* Increased width for logo and text */
+  width: 20%; /* Increased width for logo and text */
   height: 100%;
   background: linear-gradient(45deg, #2575fc, #6a11cb);  /* Gradient background */
   padding: 20px;
