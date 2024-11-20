@@ -1,4 +1,4 @@
-// Countries' denotation script
+//© Severe Techno
 const countries = {
     "am-ET": "Amharic",
     "ar-SA": "Arabic",
@@ -99,7 +99,6 @@ const countries = {
     "zu-ZA": "Zulu"
 };
 
-// DOM Elements
 const fromText = document.querySelector(".from-text"),
     toText = document.querySelector(".to-text"),
     exchageIcon = document.querySelector(".exchange"),
@@ -109,7 +108,10 @@ const fromText = document.querySelector(".from-text"),
     hamburger = document.querySelector(".hamburger"),
     navMenu = document.querySelector(".nav-menu");
 
-// Populate language dropdown
+function normalizeText(text) {
+    return text.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
 selectTag.forEach((tag, id) => {
     for (let country_code in countries) {
         let selected = id == 0 ? country_code == "en-GB" ? "selected" : "" : country_code == "hi-IN" ? "selected" : "";
@@ -118,13 +120,6 @@ selectTag.forEach((tag, id) => {
     }
 });
 
-// Normalize the text
-function normalizeText(text) {
-    text = text.trim().replace(/\s+/g, ' ').toLowerCase();
-    return text;
-}
-
-// Exchange languages and texts
 exchageIcon.addEventListener("click", () => {
     let tempText = fromText.value,
         tempLang = selectTag[0].value;
@@ -134,14 +129,12 @@ exchageIcon.addEventListener("click", () => {
     selectTag[1].value = tempLang;
 });
 
-// Clear translation if no input
 fromText.addEventListener("keyup", () => {
     if (!fromText.value) {
         toText.value = "";
     }
 });
 
-// Translate Button Event - Uses the API
 translateBtn.addEventListener("click", () => {
     let text = fromText.value.trim(),
         translateFrom = selectTag[0].value,
@@ -149,28 +142,25 @@ translateBtn.addEventListener("click", () => {
 
     if (!text) return;
 
-    toText.setAttribute("placeholder", "Translating...");
+    text = normalizeText(text);
+
+    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${translateFrom}|${translateTo}`;
     
-    // Use the translation API
-    let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
     fetch(apiUrl)
-        .then(res => res.json())
+        .then(response => response.json())
         .then(data => {
-            if (data.responseData) {
+            if (data.responseStatus === 200 && data.responseData) {
                 toText.value = data.responseData.translatedText;
             } else {
-                toText.value = "Translation not available";
+                toText.value = "Translation not available.";
             }
-            toText.setAttribute("placeholder", "Translation");
         })
         .catch(error => {
-            console.error("Translation Error:", error);
-            toText.value = "Error fetching translation.";
-            toText.setAttribute("placeholder", "Translation");
+            console.error('Error fetching translation:', error);
+            toText.value = "Error during translation.";
         });
 });
 
-// Copy or Speak functionality
 icons.forEach(icon => {
     icon.addEventListener("click", ({ target }) => {
         if (!fromText.value || !toText.value) return;
@@ -195,7 +185,6 @@ icons.forEach(icon => {
     });
 });
 
-// Hamburger Menu Toggle - Fix for the issue
 document.addEventListener("DOMContentLoaded", function () {
     if (hamburger && navMenu) {
         hamburger.addEventListener("click", function () {
@@ -207,7 +196,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Set current year dynamically
 document.addEventListener("DOMContentLoaded", function () {
     const currentYear = new Date().getFullYear();
     const yearSpan = document.getElementById("current-year");
@@ -216,3 +204,57 @@ document.addEventListener("DOMContentLoaded", function () {
         yearSpan.textContent = currentYear;
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.querySelector(".hamburger");
+    const navMenu = document.querySelector(".sidebar");
+    const closeBtn = navMenu.querySelector(".fa-times");
+    const overlay = document.querySelector(".sidebar-overlay");
+    const body = document.querySelector("body");
+
+    const navbarLogo = document.querySelector(".navbar .logo img");
+    const sidebarLogo = document.querySelector(".sidebar .sidebar-header img");
+
+    const fromText = document.querySelector("#from-text");
+    const toText = document.querySelector("#to-text");
+
+    if (hamburger && navMenu) {
+        hamburger.addEventListener("click", function () {
+            navMenu.classList.toggle("active");
+            hamburger.classList.toggle("active");
+            overlay.classList.toggle("active");
+
+            if (navMenu.classList.contains("active")) {
+                sidebarLogo.style.display = 'block';
+            } else {
+                sidebarLogo.style.display = 'none';
+            }
+        });
+
+        closeBtn.addEventListener("click", function () {
+            navMenu.classList.remove("active");
+            hamburger.classList.remove("active");
+            overlay.classList.remove("active");
+            sidebarLogo.style.display = 'none';
+        });
+
+        overlay.addEventListener("click", function () {
+            navMenu.classList.remove("active");
+            hamburger.classList.remove("active");
+            overlay.classList.remove("active");
+            sidebarLogo.style.display = 'none';
+        });
+
+        body.addEventListener("click", function (event) {
+            if (!navMenu.contains(event.target) && !hamburger.contains(event.target) && !overlay.contains(event.target)) {
+                navMenu.classList.remove("active");
+                hamburger.classList.remove("active");
+                overlay.classList.remove("active");
+                sidebarLogo.style.display = 'none';
+            }
+        });
+    } else {
+        console.error("Hamburger or navMenu element not found.");
+    }
+});
+//© Severe Techno
